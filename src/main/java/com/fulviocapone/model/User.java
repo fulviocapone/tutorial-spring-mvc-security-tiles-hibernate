@@ -1,62 +1,64 @@
 package com.fulviocapone.model;
 
 
-import java.util.HashSet;
-import java.util.Set;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
+@Entity
+@Table(name="users")
 public class User{
 
-	private String email;
+	@Id
+	@GeneratedValue
+	private Integer id;
+	
+	private String login;
+	
 	private String password;
-	private boolean enabled;
-	private Set<UserRole> userRole = new HashSet<UserRole>(0);
+	
+	@OneToOne(cascade=CascadeType.ALL)
+	@JoinTable(name="user_roles",
+		joinColumns = {@JoinColumn(name="user_id", referencedColumnName="id")},
+		inverseJoinColumns = {@JoinColumn(name="role_id", referencedColumnName="id")}
+	)
+	private Role role;
 
-	public User() {
+	public Integer getId() {
+		return id;
 	}
 
-	public User(String email, String password, boolean enabled) {
-		this.email = email;
-		this.password = password;
-		this.enabled = enabled;
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
-	public User(String email, String password, boolean enabled, Set<UserRole> userRole) {
-		this.email = email;
-		this.password = password;
-		this.enabled = enabled;
-		this.userRole = userRole;
+	public String getLogin() {
+		return login;
 	}
 
-	public String getEmail() {
-		return this.email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
+	public void setLogin(String login) {
+		this.login = login;
 	}
 
 	public String getPassword() {
-		return this.password;
+		return password;
 	}
 
 	public void setPassword(String password) {
 		this.password = password;
 	}
 
-	public boolean isEnabled() {
-		return this.enabled;
+	public Role getRole() {
+		return role;
 	}
 
-	public void setEnabled(boolean enabled) {
-		this.enabled = enabled;
-	}
-
-	public Set<UserRole> getUserRole() {
-		return this.userRole;
-	}
-
-	public void setUserRole(Set<UserRole> userRole) {
-		this.userRole = userRole;
+	public void setRole(Role role) {
+		this.role = role;
 	}
 
 }
